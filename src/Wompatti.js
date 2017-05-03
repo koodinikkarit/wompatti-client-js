@@ -2,7 +2,7 @@
 import fs from "fs";
 import grpc from "grpc";
 
-const wompattiSerivce = grpc.load(__dirname + "/wompatti/wompatti_service.proto").WompattiService;
+const wompattiSerivce = grpc.load(__dirname + "/../lib/wompatti/wompatti_service.proto").WompattiService;
 
 import Computer from "./Computer";
 
@@ -39,14 +39,12 @@ export default class {
 				name,
 				mac
 			}, (error, res) => {
-				//resolve(new C)
+				resolve(new Computer(this.client, res.computer));
 			})
 		})
 	}
 
-	fetchComputerById({
-		id
-	}) {
+	fetchComputerById(id) {
 		return new Promise((resolve, reject) => {
 			this.client.fetchComputerById({
 				id
@@ -78,14 +76,12 @@ export default class {
 		});
 	}
 
-	wakeup({
-		computerId
-	}) {
+	wakeup(computerId) {
 		return new Promise((resolve, reject) => {
 			this.client.wakeup({
 				computerId
 			}, (error, computer) => {
-				resolve(new Computer(this.client, res.computer));
+
 			});
 		});
 	}

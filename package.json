@@ -1,6 +1,6 @@
 {
   "name": "wompatti-client",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Client library for wompatti service",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,10 @@
     "preversion": ". ./resources/checkgit.sh && npm test",
     "prepublish": "npm run build",
     "test_fetchcomputers": "babel-node ./__tests__/FetchComputers",
-    "test_wakeup": "babel-node ./__tests__/WakeupComputer"
+    "test_fetchComputerById": "babel-node ./__tests__/FetchComputerById", 
+    "test_wakeup": "babel-node ./__tests__/WakeupComputer",
+    "test_addComputer": "babel-node ./__tests__/AddComputer",
+    "test_editComputer": "babel-node ./__tests__/EditComputer"
   },
   "repository": {
     "type": "git",

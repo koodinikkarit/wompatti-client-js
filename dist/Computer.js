@@ -19,9 +19,21 @@ var _class = function () {
 		this._id = id;
 		this._name = name;
 		this._mac = mac;
+		this.client = client;
 	}
 
 	_createClass(_class, [{
+		key: "wakeup",
+		value: function wakeup() {
+			var _this = this;
+
+			return new Promise(function (resolve, reject) {
+				_this.client.wakeup({
+					computerId: _this.id
+				}, function (error, res) {});
+			});
+		}
+	}, {
 		key: "id",
 		get: function get() {
 			return this._id;

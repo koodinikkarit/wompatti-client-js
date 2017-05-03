@@ -22,13 +22,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// console.log(__dirname);
-
-// fs.readFile(__dirname + "/wompatti/wompatti_service.proto", 'utf8', (err, data) => {
-// 	console.log(data);
-// });
-
-var wompattiSerivce = _grpc2.default.load(__dirname + "/wompatti/wompatti_service.proto").WompattiService;
+var wompattiSerivce = _grpc2.default.load(__dirname + "/../lib/wompatti/wompatti_service.proto").WompattiService;
 
 var _class = function () {
 	function _class(_ref) {
@@ -52,36 +46,53 @@ var _class = function () {
 				_this.client.addComputer({
 					name: name,
 					mac: mac
-				}, function (error, computer) {
-					resolve(new _Computer2.default(_this.client, computer));
+				}, function (error, res) {
+					resolve(new _Computer2.default(_this.client, res.computer));
+				});
+			});
+		}
+	}, {
+		key: "editComputer",
+		value: function editComputer(_ref3) {
+			var _this2 = this;
+
+			var id = _ref3.id,
+			    name = _ref3.name,
+			    mac = _ref3.mac;
+
+			return new Promise(function (resolve, reject) {
+				_this2.client.editComputer({
+					id: id,
+					name: name,
+					mac: mac
+				}, function (error, res) {
+					resolve(new _Computer2.default(_this2.client, res.computer));
 				});
 			});
 		}
 	}, {
 		key: "fetchComputerById",
-		value: function fetchComputerById(_ref3) {
-			var _this2 = this;
-
-			var id = _ref3.id;
+		value: function fetchComputerById(id) {
+			var _this3 = this;
 
 			return new Promise(function (resolve, reject) {
-				_this2.client.fetchComputerById({
+				_this3.client.fetchComputerById({
 					id: id
-				}, function (error, computer) {
-					resolve(new _Computer2.default(_this2.client, computer));
+				}, function (error, res) {
+					resolve(new _Computer2.default(_this3.client, res.computer));
 				});
 			});
 		}
 	}, {
 		key: "fetchComputers",
 		value: function fetchComputers(_ref4) {
-			var _this3 = this;
+			var _this4 = this;
 
 			var offset = _ref4.offset,
 			    limit = _ref4.limit;
 
 			return new Promise(function (resolve, reject) {
-				var call = _this3.client.fetchComputers({
+				var call = _this4.client.fetchComputers({
 					offset: offset,
 					limit: limit
 				});
@@ -89,7 +100,7 @@ var _class = function () {
 				var computers = [];
 
 				call.on("data", function (computer) {
-					computers.push(new _Computer2.default(_this3.client, computer));
+					computers.push(new _Computer2.default(_this4.client, computer));
 				});
 
 				call.on("end", function () {
@@ -99,17 +110,13 @@ var _class = function () {
 		}
 	}, {
 		key: "wakeup",
-		value: function wakeup(_ref5) {
-			var _this4 = this;
-
-			var computerId = _ref5.computerId;
+		value: function wakeup(computerId) {
+			var _this5 = this;
 
 			return new Promise(function (resolve, reject) {
-				_this4.client.wakeup({
+				_this5.client.wakeup({
 					computerId: computerId
-				}, function (error, computer) {
-					resolve(new _Computer2.default(_this4.client, computer));
-				});
+				}, function (error, computer) {});
 			});
 		}
 	}]);

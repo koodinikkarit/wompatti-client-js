@@ -9,6 +9,7 @@ export default class {
 		this._id = id;
 		this._name = name;
 		this._mac = mac;
+		this.client = client;
 	}
 
 	get id() {
@@ -21,5 +22,15 @@ export default class {
 
 	get mac() {
 		return this._mac;
+	}
+
+	wakeup() {
+		return new Promise((resolve, reject) => {
+			this.client.wakeup({
+				computerId: this.id
+			}, (error, res) => {
+
+			});
+		});
 	}
 }
