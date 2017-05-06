@@ -2,7 +2,11 @@
 import fs from "fs";
 import grpc from "grpc";
 
-const wompattiSerivce = grpc.load(__dirname + "/../lib/wompatti/wompatti_service.proto").WompattiService;
+
+const messages = require(__dirname + "/../lib/wompatti/wompatti_service_pb");
+const services = require(__dirname + "/../lib/wompatti/wompatti_service_grpc_pb");
+
+//const wompattiSerivce = grpc.load(__dirname + "/../lib/wompatti/wompatti_service_pb").WompattiService;
 
 import Computer from "./Computer";
 
@@ -11,7 +15,7 @@ export default class {
 		ip,
 		port
 	}) {
-		this.client = new wompattiSerivce.Wompatti(`${ip}:${port}`, grpc.credentials.createInsecure());
+		this.client = new services.WompattiClient(`${ip}:${port}`, grpc.credentials.createInsecure());
 	}
 
 	addComputer({
@@ -59,15 +63,18 @@ export default class {
 		limit
 	}) {
 		return new Promise((resolve, reject) => {
-			var call = this.client.fetchComputers({
-				offset,
-				limit
-			});
+			var req = new messages.FetchComputersRequest();
+
+			var call = this.client.fetchComputers(req);
 
 			var computers = [];
 
 			call.on("data", computer => {
-				computers.push(new Computer(this.client, computer));
+				computers.push(new Computer(this.client, {
+					id: computer.getId(),
+					name: computer.getName(),
+					mac: computer.getMac()
+				}));
 			});
 
 			call.on("end", () => {

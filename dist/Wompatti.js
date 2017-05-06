@@ -22,7 +22,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var wompattiSerivce = _grpc2.default.load(__dirname + "/../lib/wompatti/wompatti_service.proto").WompattiService;
+var messages = require(__dirname + "/../lib/wompatti/wompatti_service_pb");
+var services = require(__dirname + "/../lib/wompatti/wompatti_service_grpc_pb");
+
+//const wompattiSerivce = grpc.load(__dirname + "/../lib/wompatti/wompatti_service_pb").WompattiService;
 
 var _class = function () {
 	function _class(_ref) {
@@ -31,7 +34,7 @@ var _class = function () {
 
 		_classCallCheck(this, _class);
 
-		this.client = new wompattiSerivce.Wompatti(ip + ":" + port, _grpc2.default.credentials.createInsecure());
+		this.client = new services.WompattiClient(ip + ":" + port, _grpc2.default.credentials.createInsecure());
 	}
 
 	_createClass(_class, [{
@@ -92,15 +95,18 @@ var _class = function () {
 			    limit = _ref4.limit;
 
 			return new Promise(function (resolve, reject) {
-				var call = _this4.client.fetchComputers({
-					offset: offset,
-					limit: limit
-				});
+				var req = new messages.FetchComputersRequest();
+
+				var call = _this4.client.fetchComputers(req);
 
 				var computers = [];
 
 				call.on("data", function (computer) {
-					computers.push(new _Computer2.default(_this4.client, computer));
+					computers.push(new _Computer2.default(_this4.client, {
+						id: computer.getId(),
+						name: computer.getName(),
+						mac: computer.getMac()
+					}));
 				});
 
 				call.on("end", function () {

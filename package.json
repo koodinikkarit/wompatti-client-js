@@ -37,10 +37,12 @@
     "jest": "19.0.2",
     "cover": "0.2.9",
     "flow-bin": "0.32.0",
-    "grpc": "1.2.4"
+    "grpc": "1.2.4",
+    "google-protobuf": "3.3.0"
   },
   "files": [
     "dist/",
+    "lib/",
     "index.js"
   ]
 }
